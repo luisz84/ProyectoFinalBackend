@@ -2,13 +2,13 @@ import {promises as fs} from 'fs';
 import  {nanoid}  from 'nanoid';
 import ProductManager from './ProductManager.js';
 
-const productAll= new ProductManager
+const productAll= new ProductManager 
 
 class CartManager 
 {
     
      constructor(){
-        this.path = "src/controllers/models/carts.json"
+        this.path = "./src/controllers/models/carts.json"
      } 
      
      readCarts=async()=>{
@@ -38,25 +38,37 @@ class CartManager
         console.log(cartById)
        
     }
-    addProductsInCart= async(cartId, productId) => {
+    addProductInCart= async(cartId, productId) => {
         let cartById= await this.exist(cartId)
         if (!cartById)  return "Carrito no encontrado"
         let productById= await productAll.exist(productId)
-        if (!productById)  return "Producto no encontrado"
+        if (!cartById)  return "Producto no encontrado"
+
         let cartsAll= await this.readCarts()
-        let cartFilter= cartsAll.filter(prod=> prod.id !=productId)
-        let cartsConcat= [{id:cartId,products:[{id:productById.id, cantidad: 1 }]},...cartFilter]
-        await this.writeCarts(cartsConcat)
-        return "producto agregado al carrito"
+        let cartFilter= cartsAll.filter(cart=> cart.id !=cartId)
 
-
-
-        if(cartById.products.some(prod => prod.id === productById)){
-            let productInCart = cartById.products.find(prod=> prod.id === productId)
+        if(cartById.products.some((prod) => prod.id === productId)){
+            let productInCart =cartById.products.find(prod=> prod.id === productId);
             productInCart.cantidad++
-            let cartsConcat= [productInCart,...carFilter]
+            let cartsConcat= [productInCart,...cartFilter]
             await this.writeCarts(cartsConcat)
             return "producto sumado al carrito"
+
+        }
+        
+        cartById.products.push({id:productById.id, cantidad: 1 })
+        let cartsConcat= [cartById,...cartFilter]
+        await this.writeCarts(cartsConcat)
+        return "producto agregado al carrito"
+        
+        }
+}
+        export default CartManager
+         
+                 
+        
+
+       
         // }
 
 
@@ -67,8 +79,3 @@ class CartManager
 
         //  await this.writeCarts(cartsConcat)
         //  return "producto agregado al carrito"
-    }
-
-}
-}
-export default CartManager

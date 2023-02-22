@@ -1,4 +1,4 @@
-import Router from "router";
+import {Router} from "express";
 import ProductManager from "../controllers/ProductManager.js"
 
 

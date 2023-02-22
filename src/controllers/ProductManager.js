@@ -1,7 +1,7 @@
 import {promises as fs} from 'fs';
 import  {nanoid}  from 'nanoid';
 
- class ProductManager{
+ class ProductManager {
     constructor(){
         this.path= "./src/controllers/models/products.json"
     }
